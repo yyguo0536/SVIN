@@ -1,0 +1,7 @@
+We provide an example of interpolation.
+
+ED_ES.mp4 denotes the original 4D image which only include 2 time points.
+EDES_Interpolation.mp4 denotes the interpolated result from ED_ES.mp4. We interpolated three intermediate images.
+
+t1-t5.mp4 denotes the 4D image from ED to ES including 5 time points.
+t1-t20.mp4 denotes the interpolated 4D image from ED to ES including 20 time points.
