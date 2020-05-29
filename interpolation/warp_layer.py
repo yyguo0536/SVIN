@@ -5,7 +5,7 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
-device = torch.device('cuda:0')
+
 class SpatialTransformer(Module):
     def __init__(self, height, width, depth):
         super(SpatialTransformer, self).__init__()
@@ -28,9 +28,9 @@ class SpatialTransformer(Module):
         z_t = np.expand_dims(np.expand_dims(z_t, 0), 0)
         z_t = np.tile(z_t, [self.height, self.width, 1])
 
-        self.x_t = torch.from_numpy(x_t.astype(np.float32)).to(device)
-        self.y_t = torch.from_numpy(y_t.astype(np.float32)).to(device)
-        self.z_t = torch.from_numpy(z_t.astype(np.float32)).to(device)
+        self.x_t = torch.from_numpy(x_t.astype(np.float32)).cuda()
+        self.y_t = torch.from_numpy(y_t.astype(np.float32)).cuda()
+        self.z_t = torch.from_numpy(z_t.astype(np.float32)).cuda()
 
     def forward(self, I, dx_t, dy_t, dz_t):
         #I = torch.unsqueeze(I,1)
@@ -59,9 +59,17 @@ class SpatialTransformer(Module):
         out_width = z_new.shape[2]
         out_depth = z_new.shape[3]
 
-        x = x_new.view(-1)
-        y = y_new.view(-1)
-        z = z_new.view(-1)
+        x_new = x_new.unsqueeze(1)
+        y_new = y_new.unsqueeze(1)
+        z_new = z_new.unsqueeze(1)
+
+        x_new = x_new.expand_dims(bsize, channels, out_height, out_width, out_depth)
+        y_new = y_new.expand_dims(bsize, channels, out_height, out_width, out_depth)
+        z_new = z_new.expand_dims(bsize, channels, out_height, out_width, out_depth)
+
+        x = x_new.view(channels, -1)
+        y = y_new.view(channels, -1)
+        z = z_new.view(channels, -1)
 
         x = x.float() + 1
         y = y.float() + 1
@@ -92,15 +100,15 @@ class SpatialTransformer(Module):
         dim1 = depth*width*height
         
 
-        rep = torch.t(torch.unsqueeze(torch.ones([out_height*out_width*out_depth]),1)).to(device)
+        rep = torch.t(torch.unsqueeze(torch.ones([out_height*out_width*out_depth]),1)).cuda()
 
         rep = rep.int()
 
-        x_channel = (torch.range(0,channels-1)*dim1).to(device)
+        x_channel = (torch.range(0,channels-1)*dim1).cuda()
         x_channel = x_channel.view(-1,1)
 
         x_channel = torch.mm(x_channel,rep.float())
-        base = x_channel.view(-1)
+        base = x_channel.view(channels, -1)
 
 
         base_y0 = base.int() + y0*dim2
@@ -129,6 +137,15 @@ class SpatialTransformer(Module):
         If = torch.gather(im_flat, 0, idx_f.long())
         Ig = torch.gather(im_flat, 0, idx_g.long())
         Ih = torch.gather(im_flat, 0, idx_h.long())
+
+        Ia = Ia.view(channels, -1)
+        Ib = Ib.view(channels, -1)
+        Ic = Ic.view(channels, -1)
+        Id = Id.view(channels, -1)
+        Ie = Ie.view(channels, -1)
+        If = If.view(channels, -1)
+        Ig = Ig.view(channels, -1)
+        Ih = Ih.view(channels, -1)
 
 
         x1_f = x1.float()

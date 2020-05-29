@@ -71,11 +71,6 @@ if __name__ == '__main__':
     STM_Net.load_state_dict(tmp)
     STM_Net.eval()
 
-    warp_layer24 = SpatialTransformer(24,24,24)
-    warp_layer24 = warp_layer24.to(device)
-
-    warp_layer48 = SpatialTransformer(48,48,48)
-    warp_layer48 = warp_layer48.to(device)
 
     warp_layer96 = SpatialTransformer(96,96,96)
     warp_layer96 = warp_layer96.to(device)
@@ -142,79 +137,17 @@ if __name__ == '__main__':
                 
                 ##############0t96###########
                 D0t_01_96 = (1-t)*t*D01_96
-                D0t_10_c0 = - t * t * warp_layer96(\
-                    torch.unsqueeze(D10_96[:,0,:,:,:], 0), D10_96[:,0,:,:,:], D10_96[:,2,:,:,:], D10_96[:,1,:,:,:])
-                D0t_10_c1 = - t * t * warp_layer96(\
-                    torch.unsqueeze(D10_96[:,1,:,:,:], 0), D10_96[:,0,:,:,:], D10_96[:,2,:,:,:], D10_96[:,1,:,:,:])
-                D0t_10_c2 = - t * t * warp_layer96(\
-                    torch.unsqueeze(D10_96[:,2,:,:,:], 0), D10_96[:,0,:,:,:], D10_96[:,2,:,:,:], D10_96[:,1,:,:,:])
-
-                D0t_10_96 = torch.cat([D0t_10_c0,D0t_10_c1,D0t_10_c2], 1)
+                D0t_10_96 = - t * t * warp_layer96(\
+                    tD10_96, D10_96[:,0,:,:,:], D10_96[:,2,:,:,:], D10_96[:,1,:,:,:])
 
                 D0t_96 = D0t_01_96 + D0t_10_96
                 #############1t96############
                 D1t_10_96 = (1-t) * t * D10_96
-
-                D1t_01_c0 = - t * (1 - t) * warp_layer96(\
-                    torch.unsqueeze(D01_96[:,0,:,:,:], 0), D01_96[:,0,:,:,:], D01_96[:,2,:,:,:], D01_96[:,1,:,:,:])
-                D1t_01_c1 = - t * (1 - t) * warp_layer96(\
-                    torch.unsqueeze(D01_96[:,1,:,:,:], 0), D01_96[:,0,:,:,:], D01_96[:,2,:,:,:], D01_96[:,1,:,:,:])
-                D1t_01_c2 = - t * (1 - t) * warp_layer96(\
-                    torch.unsqueeze(D01_96[:,2,:,:,:], 0), D01_96[:,0,:,:,:], D01_96[:,2,:,:,:], D01_96[:,1,:,:,:])
-
-                D1t_01_96 = torch.cat([D1t_01_c0,D1t_01_c1,D1t_01_c2], 1)
+                D1t_01_96 = - t * (1 - t) * warp_layer96(\
+                    D01_96, D01_96[:,0,:,:,:], D01_96[:,2,:,:,:], D01_96[:,1,:,:,:])
 
                 D1t_96 = D1t_01_96 + D1t_10_96
-                ##############0t48###########
-                D0t_01_48 = (1-t)*t*D01_48
-                D0t_10_c0 = - t * t * warp_layer48(\
-                    torch.unsqueeze(D10_48[:,0,:,:,:], 0), D10_48[:,0,:,:,:], D10_48[:,2,:,:,:], D10_48[:,1,:,:,:])
-                D0t_10_c1 = - t * t * warp_layer48(\
-                    torch.unsqueeze(D10_48[:,1,:,:,:], 0), D10_48[:,0,:,:,:], D10_48[:,2,:,:,:], D10_48[:,1,:,:,:])
-                D0t_10_c2 = - t * t * warp_layer48(\
-                    torch.unsqueeze(D10_48[:,2,:,:,:], 0), D10_48[:,0,:,:,:], D10_48[:,2,:,:,:], D10_48[:,1,:,:,:])
 
-                D0t_10_48 = torch.cat([D0t_10_c0,D0t_10_c1,D0t_10_c2], 1)
-
-                D0t_48 = D0t_01_48 + D0t_10_48
-                #############1t48############
-                D1t_10_48 = (1-t) * t * D10_48
-
-                D1t_01_c0 = - t * (1 - t) * warp_layer48(\
-                    torch.unsqueeze(D01_48[:,0,:,:,:], 0), D01_48[:,0,:,:,:], D01_48[:,2,:,:,:], D01_48[:,1,:,:,:])
-                D1t_01_c1 = - t * (1 - t) * warp_layer48(\
-                    torch.unsqueeze(D01_48[:,1,:,:,:], 0), D01_48[:,0,:,:,:], D01_48[:,2,:,:,:], D01_48[:,1,:,:,:])
-                D1t_01_c2 = - t * (1 - t) * warp_layer48(\
-                    torch.unsqueeze(D01_48[:,2,:,:,:], 0), D01_48[:,0,:,:,:], D01_48[:,2,:,:,:], D01_48[:,1,:,:,:])
-
-                D1t_01_48 = torch.cat([D1t_01_c0,D1t_01_c1,D1t_01_c2], 1)
-
-                D1t_48 = D1t_01_48 + D1t_10_48
-                ##############0t24###########
-                D0t_01_24 = (1-t)*t*D01_24
-                D0t_10_c0 = - t * t * warp_layer24(\
-                    torch.unsqueeze(D10_24[:,0,:,:,:], 0), D10_24[:,0,:,:,:], D10_24[:,2,:,:,:], D10_24[:,1,:,:,:])
-                D0t_10_c1 = - t * t * warp_layer24(\
-                    torch.unsqueeze(D10_24[:,1,:,:,:], 0), D10_24[:,0,:,:,:], D10_24[:,2,:,:,:], D10_24[:,1,:,:,:])
-                D0t_10_c2 = - t * t * warp_layer24(\
-                    torch.unsqueeze(D10_24[:,2,:,:,:], 0), D10_24[:,0,:,:,:], D10_24[:,2,:,:,:], D10_24[:,1,:,:,:])
-
-                D0t_10_24 = torch.cat([D0t_10_c0,D0t_10_c1,D0t_10_c2], 1)
-
-                D0t_24 = D0t_01_24 + D0t_10_24
-                #############1t24############
-                D1t_10_24 = (1-t) * t * D10_24
-
-                D1t_01_c0 = - t * (1 - t) * warp_layer24(\
-                    torch.unsqueeze(D01_24[:,0,:,:,:], 0), D01_24[:,0,:,:,:], D01_24[:,2,:,:,:], D01_24[:,1,:,:,:])
-                D1t_01_c1 = - t * (1 - t) * warp_layer24(\
-                    torch.unsqueeze(D01_24[:,1,:,:,:], 0), D01_24[:,0,:,:,:], D01_24[:,2,:,:,:], D01_24[:,1,:,:,:])
-                D1t_01_c2 = - t * (1 - t) * warp_layer24(\
-                    torch.unsqueeze(D01_24[:,2,:,:,:], 0), D01_24[:,0,:,:,:], D01_24[:,2,:,:,:], D01_24[:,1,:,:,:])
-
-                D1t_01_24 = torch.cat([D1t_01_c0,D1t_01_c1,D1t_01_c2], 1)
-
-                D1t_24 = D1t_01_24 + D1t_10_24
                 #############generate linear interpolated intermediate image###############
 
                 img_t_01_96 = warp_layer96(\
@@ -235,7 +168,7 @@ if __name__ == '__main__':
                 epoch_iter += opt.batchSize
                 model.set_input(input_combine, img0_96, img0_48, img0_24, \
                     img1_96, img1_48, img1_24, imgt_96, imgt_48, imgt_24, \
-                    D0t_96, D1t_96, D0t_48, D1t_48, D0t_24, D1t_24, t)
+                    D0t_96, D1t_96, t)
                 model.optimize_parameters()
 
                 if total_steps % opt.display_freq == 0:
