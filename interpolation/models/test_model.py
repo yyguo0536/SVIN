@@ -55,7 +55,7 @@ class TestModel(BaseModel):
             self.print_networks(opt.verbose)
 
     def set_input(self, combined_image, img0_96,  \
-        img1_96, D0t_96, D1t_96, D0t_48, D1t_48, D0t_24, D1t_24):
+        img1_96, D0t_96, D1t_96):
         #AtoB = self.opt.which_direction == 'AtoB'
         #self.real96_A = imgt_96.to(self.device)
         self.combined_image = combined_image.to(self.device)
@@ -63,10 +63,6 @@ class TestModel(BaseModel):
         self.img1_96 = img1_96.to(self.device)
         self.D0t_96 = D0t_96.to(self.device)
         self.D1t_96 = D1t_96.to(self.device)
-        self.D0t_48 = D0t_48.to(self.device)
-        self.D1t_48 = D1t_48.to(self.device)
-        self.D0t_24 = D0t_24.to(self.device)
-        self.D1t_24 = D1t_24.to(self.device)
         #self.D96_combine = torch.cat([self.D0t_96, self.D1t_96], 1)
         self.D96_combine = torch.cat([self.D0t_96, self.D1t_96], 1)
         self.D48_combine = torch.cat([self.D0t_48, self.D1t_48], 1)

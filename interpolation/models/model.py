@@ -104,8 +104,7 @@ class InterpolationModel(BaseModel):
         self.print_networks(opt.verbose)
 
     def set_input(self, combined_image, img0_96, img0_48, img0_24, \
-        img1_96, img1_48, img1_24, imgt_96, imgt_48, imgt_24, D0t_96, D1t_96, \
-        D0t_48, D1t_48, D0t_24, D1t_24, index_l):
+        img1_96, img1_48, img1_24, imgt_96, imgt_48, imgt_24, D0t_96, D1t_96, index_l):
 
         self.real96_A = imgt_96.to(self.device)
         self.real48_A = imgt_48.to(self.device)
@@ -119,13 +118,7 @@ class InterpolationModel(BaseModel):
         self.img1_24 = img1_24.to(self.device)
         self.D0t_96 = D0t_96.to(self.device)
         self.D1t_96 = D1t_96.to(self.device)
-        self.D0t_48 = D0t_48.to(self.device)
-        self.D1t_48 = D1t_48.to(self.device)
-        self.D0t_24 = D0t_24.to(self.device)
-        self.D1t_24 = D1t_24.to(self.device)
         self.D96_combine = torch.cat([self.D0t_96, self.D1t_96], 1)
-        self.D48_combine = torch.cat([self.D0t_48, self.D1t_48], 1)
-        self.D24_combine = torch.cat([self.D0t_24, self.D1t_24], 1)
         self.index_l = index_l.to(self.device)
 
     def set_input_test(self, combined_image, img0_96, img0_48, img0_24, \
