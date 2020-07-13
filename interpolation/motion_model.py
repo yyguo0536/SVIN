@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from grid import Dense3DSpatialTransformer
+from warp_layer import SpatialTransformer
 
 
 class NetConvBlock(nn.Module):
@@ -152,9 +152,9 @@ class Net_3d_ALL(nn.Module):
         self.up_block6 = NetUpBlock(80, 24, 32, 2)#96
         self.out96_1 = NetInBlock(64, 32, 1)
         self.out96_block = NetOutSingleBlock(32, classes)
-        self.warp_layer96 = Dense3DSpatialTransformer(96,96,96)
-        self.warp_layer48 = Dense3DSpatialTransformer(48,48,48)
-        self.warp_layer24 = Dense3DSpatialTransformer(24,24,24)
+        self.warp_layer96 = SpatialTransformer(96,96,96)
+        self.warp_layer48 = SpatialTransformer(48,48,48)
+        self.warp_layer24 = SpatialTransformer(24,24,24)
 
         self.upsample = nn.Upsample(scale_factor=2, mode='trilinear')#Interpolate(scale_factor=(2, 2, 2), mode='trilinear')
 
