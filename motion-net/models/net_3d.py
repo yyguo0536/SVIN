@@ -42,7 +42,7 @@ class NetInBlock(nn.Module):
     def __init__(self, in_channels, out_channels, layers=1, k_size=3, pad_size=1):
         super(NetInBlock, self).__init__()
         self.bn = nn.BatchNorm3d(in_channels)
-        self.convb = VNetConvBlock(in_channels, out_channels, layers=layers, kernel_sz=k_size, pad=pad_size)
+        self.convb = NetConvBlock(in_channels, out_channels, layers=layers, kernel_sz=k_size, pad=pad_size)
 
     def forward(self, x):
         out = self.bn(x)
