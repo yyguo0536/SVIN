@@ -134,12 +134,12 @@ class Net_3d_ALL(nn.Module):
     def __init__(self, classes_num = 3):
         classes = classes_num
         super(Net_3d_ALL, self).__init__()
+        
         self.in_block = NetInBlock(2, 24, 2)
         self.down_block1 = NetDownBlock(24, 48, 2)#48*48*48
         self.down_block2 = NetDownBlock(48, 64, 2)#24*24*24
         self.down_block3 = NetDownBlock(64, 128, 2)#12*12*12
         self.down_block4 = NetDownBlock(128, 256, 2)#6*6*6
-
         self.up_block3 = NetUpBlock(256, 128, 256, 2)#12
         self.up_block4 = NetUpBlock(256, 64, 160, 2)#24
         self.out24_1 = NetInBlock(160, 64, 2)
@@ -149,7 +149,7 @@ class Net_3d_ALL(nn.Module):
         self.out48_1 = NetInBlock(80, 32, 2)
         self.out48_2 = NetInBlock(64, 32, 2)
         self.out48_3 = NetOutSingleBlock(32, classes)
-        self.up_block6 = NetUpBlock(80, 24, 32, 2)#96
+        self.up_block6 = NetJustUpBlock(80, 32, 2)#96
         self.out96_1 = NetInBlock(64, 32, 1)
         self.out96_block = NetOutSingleBlock(32, classes)
         self.warp_layer96 = SpatialTransformer(96,96,96)
