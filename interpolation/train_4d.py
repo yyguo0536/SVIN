@@ -74,6 +74,12 @@ if __name__ == '__main__':
 
     warp_layer96 = SpatialTransformer(96,96,96)
     warp_layer96 = warp_layer96.to(device)
+    
+    warp_layer48 = SpatialTransformer(48,48,48)
+    warp_layer48 = warp_layer48.to(device)
+    
+    warp_layer24 = SpatialTransformer(24,24,24)
+    warp_layer24 = warp_layer24.to(device)
 
     model = create_model(opt)
     visualizer = Visualizer(opt)
