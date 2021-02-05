@@ -189,7 +189,7 @@ class Test_Subjects(torch.utils.data.Dataset):
         self.index_list = index_list
 
     def __len__(self):
-        return self.slice_indice
+        return len(self.index_list)
 
     def __getitem__(self, index):
         # image
